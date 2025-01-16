@@ -1,10 +1,13 @@
-import { config } from "dotenv";
-config({ path: `${__dirname}/../.env` });
+// import { config } from "dotenv";
+require("dotenv").config({ path: `${__dirname}/../.env` });
 console.log(process.env);
-export const PORT: string = process.env.PORT as string;
 
-const DB_PASSWORD = process.env.DATABASE_PASSWORD as string;
-const DB_USERNAME = process.env.DATABASE_USERNAME as string;
-export const CONNECTION_STR = (process.env.DATABASE_CONNECTION as string)
-  .replace("<PASSWORD>", DB_PASSWORD)
-  .replace("<USERNAME>", DB_USERNAME);
+const { DB_CONNECTION_STR, DB_PASSWORD, DB_USERNAME, PORT, JWT_SECRET } =
+  process.env;
+
+export const DB_CONNECTION = DB_CONNECTION_STR.replace(
+  "<PASSWORD>",
+  DB_PASSWORD
+).replace("<USERNAME>", DB_USERNAME);
+
+export { PORT, JWT_SECRET };

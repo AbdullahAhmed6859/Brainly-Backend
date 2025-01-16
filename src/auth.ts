@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import jwt, { JwtPayload } from "jsonwebtoken";
-
-const JWT_SECRET = "secret";
+import { JWT_SECRET } from "./config";
 
 export function signToken(userId: mongoose.Types.ObjectId) {
   return jwt.sign({ id: userId }, JWT_SECRET);

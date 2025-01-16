@@ -6,10 +6,10 @@ import { signupSchema, loginSchema } from "./zodTypes/user";
 import { contentBody } from "./zodTypes/content";
 import { signToken } from "./auth";
 import { random } from "./utils";
-import { CONNECTION_STR, PORT } from "./config";
+import { DB_CONNECTION, PORT } from "./config";
 
 mongoose
-  .connect(CONNECTION_STR)
+  .connect(DB_CONNECTION)
   .then(() => {
     console.log("connected to MongoDb");
   })
