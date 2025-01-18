@@ -1,6 +1,5 @@
 // import { config } from "dotenv";
 require("dotenv").config({ path: `${__dirname}/../.env` });
-console.log(process.env);
 
 const { DB_CONNECTION_STR, DB_PASSWORD, DB_USERNAME, PORT, JWT_SECRET } =
   process.env;

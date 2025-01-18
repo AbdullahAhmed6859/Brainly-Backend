@@ -7,6 +7,7 @@ import { contentBody } from "./zodTypes/content";
 import { signToken } from "./auth";
 import { random } from "./utils";
 import { DB_CONNECTION, PORT } from "./config";
+import { shareLinkParam } from "./zodTypes/link";
 
 mongoose
   .connect(DB_CONNECTION)
@@ -99,13 +100,14 @@ apiV1Router.get("/content", protect, async (req, res) => {
   }).populate("userId", "username");
 
   res.status(200).json({
-    message: "content added",
+    message: "success",
     data: content,
   });
 });
 
 apiV1Router.delete("/content", protect, async (req, res) => {
   const { contentId } = req.body;
+
   await ContentModel.deleteMany({
     _id: contentId,
     userId: req.userId,
@@ -118,41 +120,65 @@ apiV1Router.delete("/content", protect, async (req, res) => {
 
 apiV1Router.post("/brain/share", protect, async (req, res) => {
   const { share } = req.body;
-  if (share) {
-    await LinkModel.create({
-      userId: req.userId,
-      hash: random(10),
-    });
-  } else {
+
+  if (!share) {
     await LinkModel.deleteOne({ userId: req.userId });
+    res.status(200).json({
+      message: "deleted shareable link",
+    });
+    return;
   }
 
-  res.status(200).json({
-    message: "Updated shareable link",
+  const existingLink = await LinkModel.findOne({ userId: req.userId });
+  if (existingLink) {
+    res.status(200).json({
+      message: "Existing shareable link found",
+      hash: existingLink.hash,
+    });
+    return;
+  }
+
+  const newLink = await LinkModel.create({
+    userId: req.userId,
   });
+  if (newLink) {
+    res.status(200).json({
+      message: "Shareable link created",
+      link: newLink.hash,
+    });
+    return;
+  }
+
+  res.status(200).json({ message: "link could not be created" });
 });
 
 apiV1Router.get("/brain/:shareLink", async (req, res) => {
-  const { shareLink: hash } = req.body;
-  const link = await LinkModel.findOne({ hash });
-  if (!link) {
-    res.status(411).json({ message: "incorrect Link" });
+  const parseResult = shareLinkParam.safeParse(req.params);
+  if (!parseResult.success) {
+    res.status(400).json({ error: "Invalid shareLink" });
     return;
   }
 
-  const content = await ContentModel.find({ userId: link.userId });
-  const user = await UserModel.findById(link.userId);
+  const { shareLink: hash } = req.params;
+  const link = await LinkModel.findOne({ hash }).lean();
 
+  if (!link) {
+    res.status(400).json({ error: "Invalid shareLink" });
+    return;
+  }
+
+  const content = await ContentModel.find({ userId: link.userId }).lean();
+  const user = await UserModel.findById(link.userId).lean();
   if (!user) {
     res.status(411).json({
-      message: "user not found, error should ideally not happen",
+      message: "User not found, error should ideally not happen",
     });
     return;
   }
 
-  res.json({
+  res.status(200).json({
     username: user.username,
-    content: content,
+    content,
   });
 });
 

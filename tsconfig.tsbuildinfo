@@ -1,1 +1,1 @@
-{"root":["./src/auth.ts","./src/config.ts","./src/db.ts","./src/index.ts","./src/middleware.ts","./src/override.d.ts","./src/utils.ts","./src/zodtypes/content.ts","./src/zodtypes/user.ts"],"version":"5.7.3"}
+{"root":["./src/auth.ts","./src/config.ts","./src/db.ts","./src/index.ts","./src/middleware.ts","./src/override.d.ts","./src/utils.ts","./src/zodtypes/content.ts","./src/zodtypes/link.ts","./src/zodtypes/user.ts"],"version":"5.7.3"}

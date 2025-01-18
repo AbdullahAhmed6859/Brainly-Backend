@@ -17,7 +17,6 @@ export function protect(req: Request, res: Response, next: NextFunction): void {
       return;
     }
 
-    // @ts-ignore
     req.userId = decoded.id;
 
     next();

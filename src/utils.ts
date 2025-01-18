@@ -1,5 +1,7 @@
 export function random(len: number): string {
-  let options = "abcdefghijklmnopqrstuvwxyz1234567890";
+  let options =
+    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+  const length = options.length;
 
   let output = "";
 
