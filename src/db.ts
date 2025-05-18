@@ -1,5 +1,5 @@
 import { Schema, model, Types } from "mongoose";
-import { random } from "./utils";
+import { randomStr } from "./utils";
 
 const userSchema = new Schema({
   username: { type: String, unique: true },
@@ -19,7 +19,7 @@ const contentSchema = new Schema({
 });
 
 const linkSchema = new Schema({
-  hash: { type: String, default: () => random(10) },
+  hash: { type: String, default: () => randomStr(10) },
   userId: {
     type: Types.ObjectId,
     ref: "User",

@@ -1,4 +1,4 @@
-export function random(len: number): string {
+export function randomStr(len: number): string {
   let options =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
   const length = options.length;

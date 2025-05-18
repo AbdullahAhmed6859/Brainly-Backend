@@ -5,7 +5,7 @@ import { protect } from "./middleware";
 import { signupSchema, loginSchema } from "./zodTypes/user";
 import { contentBody } from "./zodTypes/content";
 import { signToken } from "./auth";
-import { random } from "./utils";
+import { randomStr } from "./utils";
 import { DB_CONNECTION, PORT } from "./config";
 import { shareLinkParam } from "./zodTypes/link";
 
@@ -94,10 +94,19 @@ apiV1Router.post("/content", protect, async (req, res) => {
   });
 });
 
-apiV1Router.get("/content", protect, async (req, res) => {
-  const content = await ContentModel.find({
-    userId: req.userId,
-  }).populate("userId", "username");
+// apiV1Router.get("/content", protect, async (req, res) => {
+//   const content = await ContentModel.find({
+//     userId: req.userId,
+//   }).populate("userId", "username");
+
+//   res.status(200).json({
+//     message: "success",
+//     data: content,
+//   });
+// });
+
+apiV1Router.get("/content", async (_req, res) => {
+  const content = await ContentModel.find();
 
   res.status(200).json({
     message: "success",
